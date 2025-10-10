@@ -1,0 +1,300 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module Breakdown - Interactive</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: white;
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .subtitle {
+            text-align: center;
+            color: rgba(255,255,255,0.9);
+            font-size: 1.1rem;
+            margin-bottom: 50px;
+        }
+
+        .modules-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .module-card {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .module-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        }
+
+        .module-card.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .module-card.active .module-icon {
+            background: rgba(255,255,255,0.2);
+            color: white;
+        }
+
+        .module-card.active .theme,
+        .module-card.active .emphasis {
+            color: rgba(255,255,255,0.95);
+        }
+
+        .module-card.active .divider {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .module-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .module-number {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .module-card.active .module-number {
+            color: rgba(255,255,255,0.9);
+        }
+
+        .module-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #2d3748;
+        }
+
+        .module-card.active .module-title {
+            color: white;
+        }
+
+        .divider {
+            height: 2px;
+            background: #e2e8f0;
+            margin: 20px 0;
+            transition: all 0.3s ease;
+        }
+
+        .theme {
+            font-size: 1rem;
+            color: #4a5568;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .theme-label {
+            font-size: 0.85rem;
+            color: #a0aec0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 5px;
+        }
+
+        .module-card.active .theme-label {
+            color: rgba(255,255,255,0.7);
+        }
+
+        .emphasis {
+            font-size: 0.95rem;
+            color: #718096;
+            line-height: 1.6;
+        }
+
+        .emphasis-label {
+            font-size: 0.85rem;
+            color: #a0aec0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 5px;
+            margin-top: 15px;
+        }
+
+        .module-card.active .emphasis-label {
+            color: rgba(255,255,255,0.7);
+        }
+
+        .click-hint {
+            text-align: center;
+            color: rgba(255,255,255,0.8);
+            font-size: 0.95rem;
+            margin-top: 30px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .modules-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .module-card {
+                padding: 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>⚖️ Breakdown of Meaning & Flow</h1>
+        <p class="subtitle">Click any module to expand and see full details</p>
+
+        <div class="modules-grid">
+            <!-- Module 1 -->
+            <div class="module-card" onclick="toggleCard(this)">
+                <div class="module-icon">🏗️</div>
+                <div class="module-number">Module 1</div>
+                <div class="module-title">Formation & Framework</div>
+                <div class="divider"></div>
+                <div class="theme-label">Core Theme</div>
+                <div class="theme">Building legally</div>
+                <div class="emphasis-label">Legal Emphasis</div>
+                <div class="emphasis">Foundational formation (structure, EIN, bank setup)</div>
+            </div>
+
+            <!-- Module 2 -->
+            <div class="module-card" onclick="toggleCard(this)">
+                <div class="module-icon">💰</div>
+                <div class="module-number">Module 2</div>
+                <div class="module-title">Money & Merchants</div>
+                <div class="divider"></div>
+                <div class="theme-label">Core Theme</div>
+                <div class="theme">Managing finances</div>
+                <div class="emphasis-label">Legal Emphasis</div>
+                <div class="emphasis">Financial compliance (bank, merchant acceptance)</div>
+            </div>
+
+            <!-- Module 3 -->
+            <div class="module-card" onclick="toggleCard(this)">
+                <div class="module-icon">📋</div>
+                <div class="module-number">Module 3</div>
+                <div class="module-title">Compliance & Conduct</div>
+                <div class="divider"></div>
+                <div class="theme-label">Core Theme</div>
+                <div class="theme">Operating legally</div>
+                <div class="emphasis-label">Legal Emphasis</div>
+                <div class="emphasis">Day-to-day law adherence (CROA, contracts, refunds)</div>
+            </div>
+
+            <!-- Module 4 -->
+            <div class="module-card" onclick="toggleCard(this)">
+                <div class="module-icon">👥</div>
+                <div class="module-number">Module 4</div>
+                <div class="module-title">Clients & Systems</div>
+                <div class="divider"></div>
+                <div class="theme-label">Core Theme</div>
+                <div class="theme">Managing workflow</div>
+                <div class="emphasis-label">Legal Emphasis</div>
+                <div class="emphasis">Client experience & backend systems</div>
+            </div>
+
+            <!-- Module 5 -->
+            <div class="module-card" onclick="toggleCard(this)">
+                <div class="module-icon">📢</div>
+                <div class="module-number">Module 5</div>
+                <div class="module-title">Marketing & Messaging</div>
+                <div class="divider"></div>
+                <div class="theme-label">Core Theme</div>
+                <div class="theme">Selling legally</div>
+                <div class="emphasis-label">Legal Emphasis</div>
+                <div class="emphasis">FTC-compliant promotion</div>
+            </div>
+
+            <!-- Module 6 -->
+            <div class="module-card" onclick="toggleCard(this)">
+                <div class="module-icon">📈</div>
+                <div class="module-number">Module 6</div>
+                <div class="module-title">Scaling & Sustainability</div>
+                <div class="divider"></div>
+                <div class="theme-label">Core Theme</div>
+                <div class="theme">Growing ethically</div>
+                <div class="emphasis-label">Legal Emphasis</div>
+                <div class="emphasis">Hiring, delegation, automation</div>
+            </div>
+
+            <!-- Module 7 -->
+            <div class="module-card" onclick="toggleCard(this)">
+                <div class="module-icon">🔍</div>
+                <div class="module-number">Module 7</div>
+                <div class="module-title">Audit & Advancement</div>
+                <div class="divider"></div>
+                <div class="theme-label">Core Theme</div>
+                <div class="theme">Long-term protection</div>
+                <div class="emphasis-label">Legal Emphasis</div>
+                <div class="emphasis">Self-audit + partner growth path</div>
+            </div>
+        </div>
+
+        <p class="click-hint">💡 Click any card to highlight it</p>
+    </div>
+
+    <script>
+        function toggleCard(card) {
+            const allCards = document.querySelectorAll('.module-card');
+            allCards.forEach(c => {
+                if (c !== card) {
+                    c.classList.remove('active');
+                }
+            });
+            card.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Static vs Trended Credit Reporting Comparison</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 40px 20px;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .container {
+            max-width: 1400px;
+            width: 100%;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: white;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.95;
+        }
+        
+        .comparison-wrapper {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .report-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .report-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 8px;
+        }
+        
+        .static-card::before {
+            background: linear-gradient(90deg, #f093fb 0%, #f5576c 100%);
+        }
+        
+        .trended-card::before {
+            background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+        }
+        
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        .badge {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9em;
+            margin-right: 15px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .static-badge {
+            background: linear-gradient(90deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+        
+        .trended-badge {
+            background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+        }
+        
+        .card-title {
+            font-size: 1.4em;
+            color: #333;
+            font-weight: 600;
+        }
+        
+        .account-info {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+        }
+        
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .info-row:last-child {
+            border-bottom: none;
+        }
+        
+        .info-label {
+            font-weight: 600;
+            color: #666;
+            font-size: 0.95em;
+        }
+        
+        .info-value {
+            color: #333;
+            font-weight: 500;
+        }
+        
+        .section-title {
+            font-size: 1.1em;
+            color: #333;
+            font-weight: 600;
+            margin: 25px 0 15px 0;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        .payment-history {
+            display: flex;
+            gap: 5px;
+            align-items: center;
+            margin: 15px 0;
+        }
+        
+        .payment-box {
+            width: 30px;
+            height: 30px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.85em;
+            color: white;
+        }
+        
+        .payment-ok {
+            background: #28a745;
+        }
+        
+        .payment-label {
+            font-size: 0.9em;
+            color: #666;
+            margin-left: 10px;
+        }
+        
+        .snapshot-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        
+        .snapshot-text {
+            color: #856404;
+            font-weight: 500;
+            font-size: 0.95em;
+        }
+        
+        .chart-container {
+            margin: 20px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+        
+        .balance-chart {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            height: 150px;
+            margin: 20px 0;
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+            position: relative;
+        }
+        
+        .chart-bar {
+            flex: 1;
+            background: linear-gradient(to top, #4facfe, #00f2fe);
+            margin: 0 3px;
+            border-radius: 4px 4px 0 0;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .chart-bar:hover {
+            opacity: 0.8;
+        }
+        
+        .bar-value {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.7em;
+            font-weight: 600;
+            color: #333;
+            white-space: nowrap;
+        }
+        
+        .data-table-section {
+            margin-top: 20px;
+        }
+        
+        .data-table {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .data-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .data-table th {
+            background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.9em;
+        }
+        
+        .data-table td {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+            font-size: 0.9em;
+        }
+        
+        .data-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .data-table tbody tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .highlight-row {
+            background: #fff3cd !important;
+        }
+        
+        .positive-row {
+            background: #d4edda !important;
+        }
+        
+        .revolver-badge {
+            background: #ffc107;
+            color: #333;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+        
+        .improving-badge {
+            background: #28a745;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+        
+        .month-label {
+            text-align: center;
+            font-size: 0.75em;
+            color: #666;
+            margin-top: 8px;
+        }
+        
+        .chart-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+        }
+        
+        .insights-box {
+            background: #d1ecf1;
+            border-left: 4px solid #17a2b8;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        
+        .insight-item {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+        }
+        
+        .insight-icon {
+            width: 24px;
+            height: 24px;
+            background: #17a2b8;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            margin-right: 10px;
+            flex-shrink: 0;
+        }
+        
+        .insight-text {
+            color: #0c5460;
+            font-size: 0.95em;
+            font-weight: 500;
+        }
+        
+        .key-differences {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        
+        .key-differences h2 {
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 1.8em;
+        }
+        
+        .differences-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .difference-item {
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .difference-title {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+        }
+        
+        .difference-text {
+            color: #666;
+            font-size: 0.95em;
+            line-height: 1.5;
+        }
+        
+        @media (max-width: 1024px) {
+            .comparison-wrapper {
+                grid-template-columns: 1fr;
+            }
+            
+            .differences-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .key-differences div[style*="grid-template-columns: 1fr 1fr 1fr"] {
+                grid-template-columns: 1fr !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Credit Reporting Comparison</h1>
+            <p>Understanding the difference between Static and Trended Data</p>
+        </div>
+        
+        <div class="comparison-wrapper">
+            <!-- Static Reporting (FICO 8) -->
+            <div class="report-card static-card">
+                <div class="card-header">
+                    <span class="badge static-badge">FICO 8</span>
+                    <span class="card-title">Static Reporting</span>
+                </div>
+                
+                <div class="account-info">
+                    <div class="info-row">
+                        <span class="info-label">Account:</span>
+                        <span class="info-value">Chase Sapphire Credit Card</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Credit Limit:</span>
+                        <span class="info-value">$10,000</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Current Balance:</span>
+                        <span class="info-value">$3,000</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Utilization:</span>
+                        <span class="info-value">30%</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Payment Status:</span>
+                        <span class="info-value" style="color: #28a745; font-weight: 600;">Current</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Account Age:</span>
+                        <span class="info-value">3 Years</span>
+                    </div>
+                </div>
+                
+                <div class="snapshot-box">
+                    <div class="snapshot-text">
+                        📸 SNAPSHOT VIEW: Shows only current month data
+                    </div>
+                </div>
+                
+                <div class="section-title">Payment History (24 Months)</div>
+                <div class="payment-history">
+                    <div class="payment-box payment-ok">✓</div>
+                    <div class="payment-box payment-ok">✓</div>
+                    <div class="payment-box payment-ok">✓</div>
+                    <div class="payment-box payment-ok">✓</div>
+                    <div class="payment-box payment-ok">✓</div>
+                    <div class="payment-box payment-ok">✓</div>
+                    <div class="payment-label">All payments on time</div>
+                </div>
+                
+                <div class="section-title">Current Month Data Only</div>
+                <div class="data-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Data Point</th>
+                                <th>Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Current Balance</strong></td>
+                                <td>$3,000</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Credit Limit</strong></td>
+                                <td>$10,000</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Utilization</strong></td>
+                                <td>30% <span style="color: #856404; font-size: 0.85em;">(safe zone, not optimal)</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Payment Status</strong></td>
+                                <td><span style="color: #28a745; font-weight: 600;">Current / On-Time</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Last Payment</strong></td>
+                                <td>Minimum Due</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div style="margin: 20px 0; padding: 15px; background: #fff3cd; border-radius: 8px; border-left: 4px solid #ffc107;">
+                    <div style="font-weight: 600; color: #856404; margin-bottom: 8px;">📊 Lender's View with Static Data:</div>
+                    <div style="color: #856404; font-size: 0.95em; line-height: 1.6;">
+                        "This customer has 30% utilization and pays on time. Acceptable, but utilization is higher than ideal. May qualify for minimal CLI, but would need to see under 10% for substantial increases or best rate approvals. Risk assessment: neutral."
+                    </div>
+                </div>
+                
+                <div class="section-title">What Lenders DON'T See</div>
+                <div style="background: #f8d7da; padding: 15px; border-radius: 8px; border-left: 4px solid #dc3545;">
+                    <ul style="margin-left: 20px; color: #721c24; line-height: 1.8;">
+                        <li>Balance trends over time</li>
+                        <li>Payment behavior patterns</li>
+                        <li>Whether you pay in full or revolve</li>
+                        <li>Spending patterns</li>
+                        <li>Utilization history</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Trended Reporting (FICO 10T) -->
+            <div class="report-card trended-card">
+                <div class="card-header">
+                    <span class="badge trended-badge">FICO 10T</span>
+                    <span class="card-title">Trended Reporting</span>
+                </div>
+                
+                <div class="account-info">
+                    <div class="info-row">
+                        <span class="info-label">Account:</span>
+                        <span class="info-value">Chase Sapphire Credit Card</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Credit Limit:</span>
+                        <span class="info-value">$10,000</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Current Balance:</span>
+                        <span class="info-value">$3,000 <span style="color: #666; font-size: 0.85em;">(↓ from $8,500 peak)</span></span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Utilization:</span>
+                        <span class="info-value">30% <span style="color: #666; font-size: 0.85em;">(↓ from 85% peak - improved but not optimal)</span></span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Payment Status:</span>
+                        <span class="info-value" style="color: #28a745; font-weight: 600;">Current</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Account Age:</span>
+                        <span class="info-value">3 Years</span>
+                    </div>
+                </div>
+                
+                <div class="section-title">24-Month Balance History</div>
+                <div class="chart-container">
+                    <div class="balance-chart">
+                        <div class="chart-wrapper">
+                            <div class="chart-bar" style="height: 40%;">
+                                <div class="bar-value">$4,000</div>
+                            </div>
+                            <div class="month-label">Jan</div>
+                        </div>
+                        <div class="chart-wrapper">
+                            <div class="chart-bar" style="height: 45%;">
+                                <div class="bar-value">$4,500</div>
+                            </div>
+                            <div class="month-label">Feb</div>
+                        </div>
+                        <div class="chart-wrapper">
+                            <div class="chart-bar" style="height: 55%;">
+                                <div class="bar-value">$5,500</div>
+                            </div>
+                            <div class="month-label">Mar</div>
+                        </div>
+                        <div class="chart-wrapper">
+                            <div class="chart-bar" style="height: 65%;">
+                                <div class="bar-value">$6,500</div>
+                            </div>
+                            <div class="month-label">Apr</div>
+                        </div>
+                        <div class="chart-wrapper">
+                            <div class="chart-bar" style="height: 70%;">
+                                <div class="bar-value">$7,000</div>
+                            </div>
+                            <div class="month-label">May</div>
+                        </div>
+                        <div class="chart-wrapper">
+                            <div class="chart-bar" style="height: 75%;">
+                                <div class="bar-value">$7,500</div>
+                            </div>
+                            <div class="month-label">Jun</div>
+                        </div>
+                        <div class="chart-wrapper">
+                            <div class="chart-bar" style="height: 80%;">
+                                <div class="bar-value">$8,000</div>
+                            </div>
+                            <div class="month-label">Jul</div>
+                        </div>
+                        <div class="chart-wrapper">
+                            <div class="chart-bar" style="height: 85%;">
+                                <div class="bar-value">$8,500</div>
+                            </div>
+                            <div class="month-label">Aug</div>
+                        </div>
+                        <div class="chart-wrapper">
+                            <div class="chart-bar" style="height: 82%;">
+                                <div class="bar-value">$8,200</div>
+                            </div>
+                            <div class="month-label">Sep</div>
+                        </div>
+                        <div class="chart-wrapper">
+                            <div class="chart-bar" style="height: 78%;">
+                                <div class="bar-value">$7,800</div>
+                            </div>
+                            <div class="month-label">Oct</div>
+                        </div>
+                        <div class="chart-wrapper">
+                            <div class="chart-bar" style="height: 70%;">
+                                <div class="bar-value">$7,000</div>
+                            </div>
+                            <div class="month-label">Nov</div>
+                        </div>
+                        <div class="chart-wrapper">
+                            <div class="chart-bar" style="height: 30%;">
+                                <div class="bar-value">$3,000</div>
+                            </div>
+                            <div class="month-label">Dec</div>
+                        </div>
+                    </div>
+                    
+                    <div class="data-table-section">
+                        <div class="section-title" style="margin-top: 30px;">Detailed Monthly Data (Last 12 Months)</div>
+                        <div class="data-table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Month</th>
+                                        <th>Balance</th>
+                                        <th>Utilization</th>
+                                        <th>Payment Made</th>
+                                        <th>Behavior</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Jan 2024</td>
+                                        <td>$4,000</td>
+                                        <td>40%</td>
+                                        <td>$350</td>
+                                        <td><span class="revolver-badge">Revolver</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Feb 2024</td>
+                                        <td>$4,500</td>
+                                        <td>45%</td>
+                                        <td>$300</td>
+                                        <td><span class="revolver-badge">Revolver</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Mar 2024</td>
+                                        <td>$5,500</td>
+                                        <td>55%</td>
+                                        <td>$250</td>
+                                        <td><span class="revolver-badge">Revolver</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Apr 2024</td>
+                                        <td>$6,500</td>
+                                        <td>65%</td>
+                                        <td>$200</td>
+                                        <td><span class="revolver-badge">Revolver</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>May 2024</td>
+                                        <td>$7,000</td>
+                                        <td>70%</td>
+                                        <td>$250</td>
+                                        <td><span class="revolver-badge">Revolver</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Jun 2024</td>
+                                        <td>$7,500</td>
+                                        <td>75%</td>
+                                        <td>$200</td>
+                                        <td><span class="revolver-badge">Revolver</span></td>
+                                    </tr>
+                                    <tr class="highlight-row">
+                                        <td>Jul 2024</td>
+                                        <td>$8,000</td>
+                                        <td>80%</td>
+                                        <td>$150</td>
+                                        <td><span class="revolver-badge">Revolver</span></td>
+                                    </tr>
+                                    <tr class="highlight-row">
+                                        <td>Aug 2024</td>
+                                        <td>$8,500</td>
+                                        <td>85%</td>
+                                        <td>$150</td>
+                                        <td><span class="revolver-badge">Revolver</span></td>
+                                    </tr>
+                                    <tr class="positive-row">
+                                        <td>Sep 2024</td>
+                                        <td>$8,200</td>
+                                        <td>82%</td>
+                                        <td>$500</td>
+                                        <td><span class="improving-badge">Improving</span></td>
+                                    </tr>
+                                    <tr class="positive-row">
+                                        <td>Oct 2024</td>
+                                        <td>$7,800</td>
+                                        <td>78%</td>
+                                        <td>$600</td>
+                                        <td><span class="improving-badge">Improving</span></td>
+                                    </tr>
+                                    <tr class="positive-row">
+                                        <td>Nov 2024</td>
+                                        <td>$7,000</td>
+                                        <td>70%</td>
+                                        <td>$1,000</td>
+                                        <td><span class="improving-badge">Improving</span></td>
+                                    </tr>
+                                    <tr class="positive-row">
+                                        <td>Dec 2024</td>
+                                        <td>$3,000</td>
+                                        <td>30%</td>
+                                        <td>$4,200</td>
+                                        <td><span class="improving-badge">Major Paydown</span></td>
+                                    </tr>
+                                    <tr class="positive-row" style="font-weight: 600; background: #c3e6cb !important;">
+                                        <td>Jan 2025 (Current)</td>
+                                        <td>$3,000</td>
+                                        <td>30%</td>
+                                        <td>On Track</td>
+                                        <td><span class="improving-badge">Stable</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="insights-box">
+                    <div class="insight-item">
+                        <div class="insight-icon">💳</div>
+                        <div class="insight-text">Payment Behavior: Revolving balance for 8 months with minimum payments ($150-$350)</div>
+                    </div>
+                    <div class="insight-item">
+                        <div class="insight-icon">📈</div>
+                        <div class="insight-text">Trend: Balance increased from $4,000 (40%) to $8,500 (85%) over 8 months</div>
+                    </div>
+                    <div class="insight-item">
+                        <div class="insight-icon">⚠️</div>
+                        <div class="insight-text">Risk Indicator: Declining payments while balance grew (high credit stress signal)</div>
+                    </div>
+                    <div class="insight-item">
+                        <div class="insight-icon">✓</div>
+                        <div class="insight-text">Major Recovery: December showed $4,200 payment, reducing balance from $7,000 to $3,000 (57% reduction)</div>
+                    </div>
+                    <div class="insight-item">
+                        <div class="insight-icon">🎯</div>
+                        <div class="insight-text">Current Status: Stabilized at 30% utilization (minimal CLI qualified but not optimal for substantial increases)</div>
+                    </div>
+                </div>
+                
+                <div style="margin: 20px 0; padding: 15px; background: #e7f3ff; border-radius: 8px; border-left: 4px solid #2196F3;">
+                    <div style="font-weight: 600; color: #1976D2; margin-bottom: 8px;">📊 Lender's View with Trended Data:</div>
+                    <div style="color: #1565C0; font-size: 0.95em; line-height: 1.6;">
+                        "This customer experienced significant financial stress (peaked at 85% utilization in August), but demonstrated exceptional recovery. The $4,200 December payment shows strong commitment and likely improved circumstances. The positive trajectory from 85% to 30% indicates declining risk. Current 30% qualifies for minimal CLI but not substantial increases—customer needs to maintain under 10% for premium CLI offers and best rate approvals. Assessment: Improving risk profile, monitor for continued downward trend."
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="key-differences">
+            <h2>🔑 Key Differences for Lenders</h2>
+            <div class="differences-grid">
+                <div class="difference-item">
+                    <div class="difference-title">📊 Data Depth</div>
+                    <div class="difference-text">Static shows a single snapshot; Trended shows 24+ months of behavior patterns</div>
+                </div>
+                <div class="difference-item">
+                    <div class="difference-title">💰 Payment Patterns</div>
+                    <div class="difference-text">Trended distinguishes between "transactors" (pay in full) and "revolvers" (carry balances)</div>
+                </div>
+                <div class="difference-item">
+                    <div class="difference-title">📈 Trend Analysis</div>
+                    <div class="difference-text">Lenders can see if financial situation is improving, stable, or deteriorating</div>
+                </div>
+                <div class="difference-item">
+                    <div class="difference-title">🎯 Risk Assessment</div>
+                    <div class="difference-text">More accurate prediction of future payment behavior and default risk</div>
+                </div>
+                <div class="difference-item" style="border-left: 4px solid #28a745;">
+                    <div class="difference-title">✓ Utilization Context</div>
+                    <div class="difference-text">30% utilization = safe zone but NOT optimal. May qualify for minimal CLI, but under 10% preferred for substantial increases and best approvals. Trended data shows the journey to that 30%—is it improving or declining?</div>
+                </div>
+                <div class="difference-item" style="border-left: 4px solid #dc3545;">
+                    <div class="difference-title">⚠️ Hidden Risk Detection</div>
+                    <div class="difference-text">Same 30% utilization can mean completely different risk levels: stable long-term vs. recent recovery from 85% maxed-out stress</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="key-differences" style="margin-top: 30px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+            <h2 style="color: white;">📚 Credit Utilization Reality Check</h2>
+            <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 10px; margin-top: 20px;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px;">
+                    <div style="background: rgba(255,255,255,0.15); padding: 15px; border-radius: 8px; text-align: center;">
+                        <div style="font-size: 2em; margin-bottom: 10px;">✅</div>
+                        <div style="font-weight: 600; margin-bottom: 8px;">OPTIMAL</div>
+                        <div style="font-size: 1.5em; font-weight: 700;">Under 10%</div>
+                        <div style="font-size: 0.9em; margin-top: 8px; opacity: 0.9;">Substantial CLI eligible, best rates, premium approvals</div>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.15); padding: 15px; border-radius: 8px; text-align: center;">
+                        <div style="font-size: 2em; margin-bottom: 10px;">⚠️</div>
+                        <div style="font-weight: 600; margin-bottom: 8px;">SAFE ZONE</div>
+                        <div style="font-size: 1.5em; font-weight: 700;">10-30%</div>
+                        <div style="font-size: 0.9em; margin-top: 8px; opacity: 0.9;">Acceptable but not favorable, minimal CLI qualified, standard rates</div>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.15); padding: 15px; border-radius: 8px; text-align: center;">
+                        <div style="font-size: 2em; margin-bottom: 10px;">❌</div>
+                        <div style="font-weight: 600; margin-bottom: 8px;">HIGH RISK</div>
+                        <div style="font-size: 1.5em; font-weight: 700;">Over 30%</div>
+                        <div style="font-size: 0.9em; margin-top: 8px; opacity: 0.9;">Hurts score, denials likely, CLI unlikely or denied</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
